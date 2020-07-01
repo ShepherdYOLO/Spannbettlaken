@@ -91,7 +91,7 @@ public void draw() {
 }
 public void showValues()
 {
-  //Zeigt Daten zum debuggen an
+  //Zeigt Daten zum debuggen an Hallo Fritz
 
   fill(255);
   textSize(12);
@@ -115,7 +115,7 @@ public void Cursor()
 {
   //Zeichnet den Cursor
 
-  fill(0xffFF8E03,map(posZ,0,1,150,170));
+  fill(0,map(posZ,0,1,150,170));
   stroke(0xff9D08A5,100);
   strokeWeight(2);
   circle(posX, posY, 7+3*(posZ));
@@ -291,7 +291,6 @@ public void toAddmos()
     sendOSC("/PX",tiltX,addmos,toAddmos);
     sendOSC("/PY",tiltY,addmos,toAddmos);
     sendOSC("/dist",map(dist(posX,posY,0,0),0f,1335f,0f,1f),addmos,toAddmos);
-    println(map(dist(posX,posY,0,0),0f,1335f,0f,1f));
     sendOSC("/Map1",getPixel(heatmap1, "r"),addmos,toAddmos);
     sendOSC("/Map2",getPixel(heatmap1, "g"),addmos,toAddmos);
     sendOSC("/Map3",getPixel(heatmap1, "b"),addmos,toAddmos);
