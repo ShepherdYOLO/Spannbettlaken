@@ -1,6 +1,6 @@
 void showValues()
 {
-  //Zeigt Daten zum debuggen an test
+  //Zeigt Daten zum debuggen an Hallo Fritz
 
   fill(255);
   textSize(12);
