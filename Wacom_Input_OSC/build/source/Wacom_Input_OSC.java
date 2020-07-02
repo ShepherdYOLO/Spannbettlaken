@@ -249,7 +249,8 @@ public void toAbleton()
     sendOSC("/Map1",getPixel(heatmap1, "r"),msg,myRemoteLocation);
     sendOSC("/Map2",getPixel(heatmap1, "g"),msg,myRemoteLocation);
     sendOSC("/Map3",getPixel(heatmap1, "b"),msg,myRemoteLocation);
-    sendOSC("/Map4",getPixel(heatmap2, "r"),msg,myRemoteLocation);
+    sendOSC("/Map4",getPixel(heatmap3, "r"),msg,myRemoteLocation);
+    sendOSC("/Map5",getPixel(heatmap3, "g"),msg,myRemoteLocation);
     sendOSC("/TiltX",tiltX,msg,myRemoteLocation);
     sendOSC("/TiltY",tiltY,msg,myRemoteLocation);
 
@@ -267,7 +268,7 @@ public void toAbleton()
     {
       counter ++;
     }
-    if((counter == holdtime) && (hold == clipVal)&&(posZ > 0.5f))
+    if((counter == holdtime) && (hold == clipVal)/*&&(posZ > 0.5)*/)
     {
       sendOSC("/Clips1",clipVal,msg,myRemoteLocation);
       clipValdBug=clipVal;
