@@ -114,11 +114,10 @@ public void showValues()
 public void Cursor()
 {
   //Zeichnet den Cursor
-
   fill(0xffFF8E03,map(posZ,0,1,150,170));
   stroke(0xff9D08A5,100);
   strokeWeight(2);
-  circle(posX, posY, 7+3*(posZ));
+  circle(posX, posY, 10+3*(posZ));
 }
 
 
