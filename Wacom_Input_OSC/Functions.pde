@@ -1,6 +1,6 @@
 void showValues()
 {
-  //Zeigt Daten zum debuggen an
+  //Zeigt Daten zum debuggen an Hallo Fritz
 
   fill(255);
   textSize(12);
@@ -23,6 +23,7 @@ void showValues()
 void Cursor()
 {
   //Zeichnet den Cursor
+
   fill(#FF8E03,map(posZ,0,1,150,170));
   stroke(#9D08A5,100);
   strokeWeight(2);
