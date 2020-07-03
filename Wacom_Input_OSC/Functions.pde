@@ -244,3 +244,12 @@ String dbug(String s)
 {
   return s;
 }
+
+
+
+void drawCircle()
+{
+  fill(255);
+  noStroke();
+  ellipse(width/2,height/2, 50, 50);
+}

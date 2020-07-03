@@ -59,6 +59,7 @@ public void setup() {
   tablet = new Tablet(this);
   
 
+
   oscP5 = new OscP5(this, 8000);
   myRemoteLocation = new NetAddress("127.0.0.1", 32000);
   toAddmos = new NetAddress("127.0.0.1", 7099);
@@ -78,6 +79,7 @@ public void draw() {
   clear();
   refreshInputs();
   drawFocus();
+  drawCircle();
 
   //image(img, width/2, height/2 );
 
@@ -334,6 +336,15 @@ public void drawFocus()
 public String dbug(String s)
 {
   return s;
+}
+
+
+
+public void drawCircle()
+{
+  fill(255);
+  noStroke();
+  ellipse(width/2,height/2, 50, 50);
 }
   public void settings() {  size(944, 944); }
   static public void main(String[] passedArgs) {
