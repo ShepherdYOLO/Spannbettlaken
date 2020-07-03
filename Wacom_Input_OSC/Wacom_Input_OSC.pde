@@ -59,7 +59,6 @@ void draw() {
   clear();
   refreshInputs();
   drawFocus();
-  drawCircle();
 
   //image(img, width/2, height/2 );
 
