@@ -154,13 +154,25 @@ void toAbleton()
   {
     sendOSC("/Z",posZ,msg,myRemoteLocation);
     sendOSC("/freq",map(posZ,0f,1f,3f,10f),msg,myRemoteLocation);
+
     sendOSC("/Map1",getPixel(heatmap1, "r"),msg,myRemoteLocation);
     sendOSC("/Map2",getPixel(heatmap1, "g"),msg,myRemoteLocation);
     sendOSC("/Map3",getPixel(heatmap1, "b"),msg,myRemoteLocation);
+
+    sendOSC("/Map7",getPixel(heatmap2, "r"),msg,myRemoteLocation);
+    sendOSC("/Map8",getPixel(heatmap2, "g"),msg,myRemoteLocation);
+    sendOSC("/Map9",getPixel(heatmap2, "b"),msg,myRemoteLocation);
+
     sendOSC("/Map4",getPixel(heatmap3, "r"),msg,myRemoteLocation);
     sendOSC("/Map5",getPixel(heatmap3, "g"),msg,myRemoteLocation);
-    sendOSC("/TiltX",tiltX,msg,myRemoteLocation);
-    sendOSC("/TiltY",tiltY,msg,myRemoteLocation);
+    sendOSC("/Map6",getPixel(heatmap3, "b"),msg,myRemoteLocation);
+
+    sendOSC("/Map10",getPixel(heatmap4, "r"),msg,myRemoteLocation);
+    sendOSC("/Map11",getPixel(heatmap4, "g"),msg,myRemoteLocation);
+    sendOSC("/Map12",getPixel(heatmap4, "b"),msg,myRemoteLocation);
+
+    //sendOSC("/TiltX",tiltX,msg,myRemoteLocation);
+    //sendOSC("/TiltY",tiltY,msg,myRemoteLocation);
 
     float ClipCount = 10;
     // Legt die Anzahl der Clips fest, die es zu Unterscheiden gilt, VORSICHT wenn schon Maps angelegt sind
@@ -178,7 +190,7 @@ void toAbleton()
     }
     if((counter == holdtime) && (hold == clipVal)/*&&(posZ > 0.5)*/)
     {
-      sendOSC("/Clips1",clipVal,msg,myRemoteLocation);
+      //sendOSC("/Clips1",clipVal,msg,myRemoteLocation);
       clipValdBug=clipVal;
     }
     savedClipVal = clipVal;

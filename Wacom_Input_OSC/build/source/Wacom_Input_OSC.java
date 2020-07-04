@@ -26,7 +26,7 @@ PFont  roboto;
 
 Tablet tablet;
 PImage img;
-PImage heatmap1, heatmap2, heatmap3, heatmap_clips, addmos_sine;
+PImage heatmap1, heatmap2, heatmap3, heatmap_clips, addmos_sine, heatmap4;
 String mode = "wait";
 OscP5 oscP5;
 NetAddress myRemoteLocation;
@@ -67,6 +67,7 @@ public void setup() {
   heatmap1 = loadImage("heatmap1.png");
   heatmap2 = loadImage("heatmap2.png");
   heatmap3 = loadImage("heatmap3.png");
+  heatmap4 = loadImage("heatmap4.png");
   heatmap_clips = loadImage("heatmap_clips.png");
   addmos_sine = loadImage("Addmos_Sinussound.jpg");
   img = loadImage("Schwarze_Zumalung.png");
@@ -79,7 +80,6 @@ public void draw() {
   clear();
   refreshInputs();
   drawFocus();
-  drawCircle();
 
   //image(img, width/2, height/2 );
 
@@ -93,7 +93,7 @@ public void draw() {
 }
 public void showValues()
 {
-  //Zeigt Daten zum debuggen an Hallo Fritz
+  //Zeigt Daten zum debuggen an
 
   fill(255);
   textSize(12);
@@ -119,7 +119,7 @@ public void Cursor()
   fill(0xffFF8E03,map(posZ,0,1,150,170));
   stroke(0xff9D08A5,100);
   strokeWeight(2);
-  circle(posX, posY, 10+3*(posZ));
+  circle(posX, posY, 7+3*(posZ));
 }
 
 
@@ -247,13 +247,25 @@ public void toAbleton()
   {
     sendOSC("/Z",posZ,msg,myRemoteLocation);
     sendOSC("/freq",map(posZ,0f,1f,3f,10f),msg,myRemoteLocation);
+
     sendOSC("/Map1",getPixel(heatmap1, "r"),msg,myRemoteLocation);
     sendOSC("/Map2",getPixel(heatmap1, "g"),msg,myRemoteLocation);
     sendOSC("/Map3",getPixel(heatmap1, "b"),msg,myRemoteLocation);
+
+    sendOSC("/Map7",getPixel(heatmap2, "r"),msg,myRemoteLocation);
+    sendOSC("/Map8",getPixel(heatmap2, "g"),msg,myRemoteLocation);
+    sendOSC("/Map9",getPixel(heatmap2, "b"),msg,myRemoteLocation);
+
     sendOSC("/Map4",getPixel(heatmap3, "r"),msg,myRemoteLocation);
     sendOSC("/Map5",getPixel(heatmap3, "g"),msg,myRemoteLocation);
-    sendOSC("/TiltX",tiltX,msg,myRemoteLocation);
-    sendOSC("/TiltY",tiltY,msg,myRemoteLocation);
+    sendOSC("/Map6",getPixel(heatmap3, "b"),msg,myRemoteLocation);
+
+    sendOSC("/Map10",getPixel(heatmap4, "r"),msg,myRemoteLocation);
+    sendOSC("/Map11",getPixel(heatmap4, "g"),msg,myRemoteLocation);
+    sendOSC("/Map12",getPixel(heatmap4, "b"),msg,myRemoteLocation);
+
+    //sendOSC("/TiltX",tiltX,msg,myRemoteLocation);
+    //sendOSC("/TiltY",tiltY,msg,myRemoteLocation);
 
     float ClipCount = 10;
     // Legt die Anzahl der Clips fest, die es zu Unterscheiden gilt, VORSICHT wenn schon Maps angelegt sind
@@ -271,7 +283,7 @@ public void toAbleton()
     }
     if((counter == holdtime) && (hold == clipVal)/*&&(posZ > 0.5)*/)
     {
-      sendOSC("/Clips1",clipVal,msg,myRemoteLocation);
+      //sendOSC("/Clips1",clipVal,msg,myRemoteLocation);
       clipValdBug=clipVal;
     }
     savedClipVal = clipVal;

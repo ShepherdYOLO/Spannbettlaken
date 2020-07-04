@@ -6,7 +6,7 @@ PFont  roboto;
 
 Tablet tablet;
 PImage img;
-PImage heatmap1, heatmap2, heatmap3, heatmap_clips, addmos_sine;
+PImage heatmap1, heatmap2, heatmap3, heatmap_clips, addmos_sine, heatmap4;
 String mode = "wait";
 OscP5 oscP5;
 NetAddress myRemoteLocation;
@@ -47,6 +47,7 @@ void setup() {
   heatmap1 = loadImage("heatmap1.png");
   heatmap2 = loadImage("heatmap2.png");
   heatmap3 = loadImage("heatmap3.png");
+  heatmap4 = loadImage("heatmap4.png");
   heatmap_clips = loadImage("heatmap_clips.png");
   addmos_sine = loadImage("Addmos_Sinussound.jpg");
   img = loadImage("Schwarze_Zumalung.png");
