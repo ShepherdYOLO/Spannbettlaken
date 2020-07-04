@@ -39,6 +39,7 @@ void setup() {
   tablet = new Tablet(this);
   size(944, 944);
 
+
   oscP5 = new OscP5(this, 8000);
   myRemoteLocation = new NetAddress("127.0.0.1", 32000);
   toAddmos = new NetAddress("127.0.0.1", 7099);

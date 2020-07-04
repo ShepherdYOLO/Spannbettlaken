@@ -1,6 +1,6 @@
 void showValues()
 {
-  //Zeigt Daten zum debuggen an Hallo Fritz
+  //Zeigt Daten zum debuggen an
 
   fill(255);
   textSize(12);
@@ -23,7 +23,6 @@ void showValues()
 void Cursor()
 {
   //Zeichnet den Cursor
-
   fill(#FF8E03,map(posZ,0,1,150,170));
   stroke(#9D08A5,100);
   strokeWeight(2);
@@ -244,4 +243,13 @@ void drawFocus()
 String dbug(String s)
 {
   return s;
+}
+
+
+
+void drawCircle()
+{
+  fill(255);
+  noStroke();
+  ellipse(width/2,height/2, 50, 50);
 }
