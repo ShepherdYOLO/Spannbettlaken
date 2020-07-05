@@ -83,9 +83,10 @@ void Menu()
     text("Welcome " + text + "!\n\nDo you want to use tablet mode [press t]\nOr mouse mode [press m]", width/2, height*0.3);
   }
 }
-
-
-
+/*
+FloatList smoothed = new FloatList();
+int listSize = 10;
+*/
 void refreshInputs() {
   float lerpXY = 0.4;
   float lerpZ = 0.3;
@@ -120,7 +121,23 @@ void refreshInputs() {
     posX = mouseX;
     posY = mouseY;
   }
+  /*
+  if(smoothed.size()<listSize)
+  {
+    smoothed.append(output);
+  }else{
+    smoothed.remove(0);
+    smoothed.append(output);
+  }
 
+  float med = 0;
+  for(int i = 0; i < smoothed.size(); i++)
+  {
+    med += smoothed.get(i);
+  }
+
+  med /= smoothed.size();
+  */
 }
 
 
@@ -139,20 +156,29 @@ boolean count = false;
 int counter = 0;
 int holdtime = 11;
 
+
+
 void sendOSC(String Addr, float output, OscMessage message, NetAddress location)
 {
-  message.setAddrPattern(Addr);
-  message.add(output);
-  oscP5.send(message,location);
-  message.clear();
+  if(/*output !=0*/true)
+  {
+    message.setAddrPattern(Addr);
+    message.add(output);
+    oscP5.send(message,location);
+    message.clear();
+  }
+
 }
 
 
 void toAbleton()
 {
-  if(wait == true)
+  if(wait == waitmax)
   {
+    println(wait);
+
     sendOSC("/Z",posZ,msg,myRemoteLocation);
+
     sendOSC("/freq",map(posZ,0f,1f,3f,10f),msg,myRemoteLocation);
 
     sendOSC("/Map1",getPixel(heatmap1, "r"),msg,myRemoteLocation);
@@ -170,6 +196,7 @@ void toAbleton()
     sendOSC("/Map10",getPixel(heatmap4, "r"),msg,myRemoteLocation);
     sendOSC("/Map11",getPixel(heatmap4, "g"),msg,myRemoteLocation);
     sendOSC("/Map12",getPixel(heatmap4, "b"),msg,myRemoteLocation);
+
 
     //sendOSC("/TiltX",tiltX,msg,myRemoteLocation);
     //sendOSC("/TiltY",tiltY,msg,myRemoteLocation);
@@ -195,7 +222,11 @@ void toAbleton()
     }
     savedClipVal = clipVal;
   }
-  wait = !wait;
+  wait++;
+  if(wait > waitmax)
+  {
+    wait = 0;
+  }
 }
 
 
@@ -264,4 +295,69 @@ void drawCircle()
   fill(255);
   noStroke();
   ellipse(width/2,height/2, 50, 50);
+}
+
+
+class OSClass{
+
+private FloatList buffer = new FloatList();
+private int buffersize = 10;
+private String Addr;
+private OscMessage message = new OscMessage("/default");
+private boolean isChanged = true;
+private float out;
+
+OSClass(NetAddress loc, String Adr)
+{
+  Addr = Adr;
+  //location = loc;
+}
+
+private void checkIfChanged()
+{
+  if(buffer.max()==buffer.min())
+  {
+    isChanged = false;
+  }else{
+
+    isChanged = true;
+  }
+}
+
+
+private void writeBuffer()
+{
+  if(buffer.size()!=buffersize)
+  {
+    buffer.append(out);
+  }else{
+    buffer.remove(0);
+    buffer.append(out);
+  }
+}
+
+public void send(float value)
+{
+  out = value;
+  writeBuffer();
+
+  checkIfChanged();
+
+  if(isChanged)
+  {
+    println(buffer);
+    message.setAddrPattern(Addr);
+    message.add(out);
+    OscP5.flush(message,myRemoteLocation);
+    message.clear();
+  }
+
+}
+
+
+public void setBuffersize(int size)
+{
+  buffersize = size;
+}
+
 }
