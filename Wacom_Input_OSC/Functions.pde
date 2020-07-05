@@ -83,9 +83,10 @@ void Menu()
     text("Welcome " + text + "!\n\nDo you want to use tablet mode [press t]\nOr mouse mode [press m]", width/2, height*0.3);
   }
 }
-
-
-
+/*
+FloatList smoothed = new FloatList();
+int listSize = 10;
+*/
 void refreshInputs() {
   float lerpXY = 0.4;
   float lerpZ = 0.3;
@@ -120,7 +121,23 @@ void refreshInputs() {
     posX = mouseX;
     posY = mouseY;
   }
+  /*
+  if(smoothed.size()<listSize)
+  {
+    smoothed.append(output);
+  }else{
+    smoothed.remove(0);
+    smoothed.append(output);
+  }
 
+  float med = 0;
+  for(int i = 0; i < smoothed.size(); i++)
+  {
+    med += smoothed.get(i);
+  }
+
+  med /= smoothed.size();
+  */
 }
 
 
@@ -139,12 +156,15 @@ boolean count = false;
 int counter = 0;
 int holdtime = 11;
 
+
+
 void sendOSC(String Addr, float output, OscMessage message, NetAddress location)
 {
   message.setAddrPattern(Addr);
   message.add(output);
   oscP5.send(message,location);
   message.clear();
+  println(med);
 }
 
 
