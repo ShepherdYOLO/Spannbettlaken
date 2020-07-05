@@ -155,8 +155,6 @@ void toAbleton()
 {
   if(wait == waitmax || true)
   {
-    println(wait);
-
     Z.send(posZ);
 
     Map1.send(getPixel(heatmap1, "r"));
@@ -169,7 +167,7 @@ void toAbleton()
 
     Map4.send(getPixel(heatmap3, "r"));
     Map5.send(getPixel(heatmap3, "g"));
-    Map5.send(getPixel(heatmap3, "b"));
+    Map6.send(getPixel(heatmap3, "b"));
 
     Map10.send(getPixel(heatmap4, "r"));
     Map11.send(getPixel(heatmap4, "g"));

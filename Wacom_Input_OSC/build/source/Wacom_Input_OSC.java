@@ -32,8 +32,26 @@ OscP5 oscP5 = new OscP5(this,8000);
 NetAddress myRemoteLocation;
 NetAddress toAddmos;
 
-OscMessage msg = new OscMessage("/Z");
+//OscMessage msg = new OscMessage("/Z");
 OscMessage addmos = new OscMessage("/out");
+
+OSClass Z = new OSClass(myRemoteLocation,"/Z");
+
+OSClass Map1 = new OSClass(myRemoteLocation,"/Map1");
+OSClass Map2 = new OSClass(myRemoteLocation,"/Map2");
+OSClass Map3 = new OSClass(myRemoteLocation,"/Map3");
+
+OSClass Map7 = new OSClass(myRemoteLocation,"/Map7");
+OSClass Map8 = new OSClass(myRemoteLocation,"/Map8");
+OSClass Map9 = new OSClass(myRemoteLocation,"/Map9");
+
+OSClass Map4 = new OSClass(myRemoteLocation,"/Map4");
+OSClass Map5 = new OSClass(myRemoteLocation,"/Map5");
+OSClass Map6 = new OSClass(myRemoteLocation,"/Map6");
+
+OSClass Map10 = new OSClass(myRemoteLocation,"/Map10");
+OSClass Map11 = new OSClass(myRemoteLocation,"/Map11");
+OSClass Map12 = new OSClass(myRemoteLocation,"/Map12");
 
 float posX = 0;
 float posY = 0;
@@ -75,27 +93,11 @@ public void setup() {
   imageMode(CENTER);
 
   roboto = createFont("RobotoCondensed-Light.ttf",50);
-
-
 }
 
-OSClass Z = new OSClass(myRemoteLocation,"/Z");
 
-OSClass Map1 = new OSClass(myRemoteLocation,"/Map1");
-OSClass Map2 = new OSClass(myRemoteLocation,"/Map2");
-OSClass Map3 = new OSClass(myRemoteLocation,"/Map3");
 
-OSClass Map7 = new OSClass(myRemoteLocation,"/Map7");
-OSClass Map8 = new OSClass(myRemoteLocation,"/Map8");
-OSClass Map9 = new OSClass(myRemoteLocation,"/Map9");
 
-OSClass Map4 = new OSClass(myRemoteLocation,"/Map4");
-OSClass Map5 = new OSClass(myRemoteLocation,"/Map5");
-OSClass Map6 = new OSClass(myRemoteLocation,"/Map6");
-
-OSClass Map10 = new OSClass(myRemoteLocation,"/Map10");
-OSClass Map11 = new OSClass(myRemoteLocation,"/Map11");
-OSClass Map12 = new OSClass(myRemoteLocation,"/Map12");
 
 public void draw() {
   clear();
@@ -198,10 +200,7 @@ public void Menu()
     text("Welcome " + text + "!\n\nDo you want to use tablet mode [press t]\nOr mouse mode [press m]", width/2, height*0.3f);
   }
 }
-/*
-FloatList smoothed = new FloatList();
-int listSize = 10;
-*/
+
 public void refreshInputs() {
   float lerpXY = 0.4f;
   float lerpZ = 0.3f;
@@ -236,23 +235,6 @@ public void refreshInputs() {
     posX = mouseX;
     posY = mouseY;
   }
-  /*
-  if(smoothed.size()<listSize)
-  {
-    smoothed.append(output);
-  }else{
-    smoothed.remove(0);
-    smoothed.append(output);
-  }
-
-  float med = 0;
-  for(int i = 0; i < smoothed.size(); i++)
-  {
-    med += smoothed.get(i);
-  }
-
-  med /= smoothed.size();
-  */
 }
 
 
@@ -290,28 +272,6 @@ public void toAbleton()
 {
   if(wait == waitmax || true)
   {
-    println(wait);
-    /*
-    sendOSC("/Z",posZ,msg,myRemoteLocation);
-
-    sendOSC("/freq",map(posZ,0f,1f,3f,10f),msg,myRemoteLocation);
-
-    sendOSC("/Map1",getPixel(heatmap1, "r"),msg,myRemoteLocation);
-    sendOSC("/Map2",getPixel(heatmap1, "g"),msg,myRemoteLocation);
-    sendOSC("/Map3",getPixel(heatmap1, "b"),msg,myRemoteLocation);
-
-    sendOSC("/Map7",getPixel(heatmap2, "r"),msg,myRemoteLocation);
-    sendOSC("/Map8",getPixel(heatmap2, "g"),msg,myRemoteLocation);
-    sendOSC("/Map9",getPixel(heatmap2, "b"),msg,myRemoteLocation);
-
-    sendOSC("/Map4",getPixel(heatmap3, "r"),msg,myRemoteLocation);
-    sendOSC("/Map5",getPixel(heatmap3, "g"),msg,myRemoteLocation);
-    sendOSC("/Map6",getPixel(heatmap3, "b"),msg,myRemoteLocation);
-
-    sendOSC("/Map10",getPixel(heatmap4, "r"),msg,myRemoteLocation);
-    sendOSC("/Map11",getPixel(heatmap4, "g"),msg,myRemoteLocation);
-    sendOSC("/Map12",getPixel(heatmap4, "b"),msg,myRemoteLocation);
-    */
     Z.send(posZ);
 
     Map1.send(getPixel(heatmap1, "r"));
@@ -324,7 +284,7 @@ public void toAbleton()
 
     Map4.send(getPixel(heatmap3, "r"));
     Map5.send(getPixel(heatmap3, "g"));
-    Map5.send(getPixel(heatmap3, "b"));
+    Map6.send(getPixel(heatmap3, "b"));
 
     Map10.send(getPixel(heatmap4, "r"));
     Map11.send(getPixel(heatmap4, "g"));
@@ -430,6 +390,10 @@ public void drawCircle()
   noStroke();
   ellipse(width/2,height/2, 50, 50);
 }
+
+
+
+
 
 
 class OSClass{

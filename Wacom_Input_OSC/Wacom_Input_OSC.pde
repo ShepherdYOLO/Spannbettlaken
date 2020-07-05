@@ -13,7 +13,7 @@ NetAddress myRemoteLocation;
 NetAddress toAddmos;
 
 //OscMessage msg = new OscMessage("/Z");
-//OscMessage addmos = new OscMessage("/out");
+OscMessage addmos = new OscMessage("/out");
 
 OSClass Z = new OSClass(myRemoteLocation,"/Z");
 
