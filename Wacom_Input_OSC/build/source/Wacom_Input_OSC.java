@@ -28,7 +28,7 @@ Tablet tablet;
 PImage img;
 PImage heatmap1, heatmap2, heatmap3, heatmap_clips, addmos_sine, heatmap4;
 String mode = "wait";
-OscP5 oscP5;
+OscP5 oscP5 = new OscP5(this,8000);
 NetAddress myRemoteLocation;
 NetAddress toAddmos;
 
@@ -41,12 +41,12 @@ float posZ = 0;
 float tiltX = 0;
 float tiltY = 0;
 
-
 float easing = 0.01f;
 
-int framerate = 35;
+int framerate = 60;
 
-boolean wait = false;
+int wait = 0;
+int waitmax = 2;
 boolean wait2 = false;
 
 float inc = fromMStoIncr(300); //Inkrement zum Skalieren von posZ - je größer desto schneller
@@ -75,7 +75,12 @@ public void setup() {
   imageMode(CENTER);
 
   roboto = createFont("RobotoCondensed-Light.ttf",50);
+
+
 }
+
+OSClass Z = new OSClass(myRemoteLocation,"/Z");
+OSClass Map1 = new OSClass(myRemoteLocation,"/Map1");
 
 public void draw() {
   clear();
@@ -83,12 +88,13 @@ public void draw() {
   drawFocus();
 
   //image(img, width/2, height/2 );
-
+  Z.send(posZ);
+  Map1.send(getPixel(heatmap1, "r"));
   toAddmos();
   Menu();
   showValues();
   Cursor();
-  toAbleton();
+  //toAbleton();
   noStroke();
   noCursor();
 }
@@ -177,9 +183,10 @@ public void Menu()
     text("Welcome " + text + "!\n\nDo you want to use tablet mode [press t]\nOr mouse mode [press m]", width/2, height*0.3f);
   }
 }
-
-
-
+/*
+FloatList smoothed = new FloatList();
+int listSize = 10;
+*/
 public void refreshInputs() {
   float lerpXY = 0.4f;
   float lerpZ = 0.3f;
@@ -214,7 +221,23 @@ public void refreshInputs() {
     posX = mouseX;
     posY = mouseY;
   }
+  /*
+  if(smoothed.size()<listSize)
+  {
+    smoothed.append(output);
+  }else{
+    smoothed.remove(0);
+    smoothed.append(output);
+  }
 
+  float med = 0;
+  for(int i = 0; i < smoothed.size(); i++)
+  {
+    med += smoothed.get(i);
+  }
+
+  med /= smoothed.size();
+  */
 }
 
 
@@ -233,40 +256,29 @@ boolean count = false;
 int counter = 0;
 int holdtime = 11;
 
-FloatList smoothed = new FloatList();
-int listSize = 10;
+
 
 public void sendOSC(String Addr, float output, OscMessage message, NetAddress location)
 {
-  if(smoothed.size()<listSize)
+  if(/*output !=0*/true)
   {
-    smoothed.append(output);
-  }else{
-    smoothed.remove(0);
-    smoothed.append(output);
+    message.setAddrPattern(Addr);
+    message.add(output);
+    oscP5.send(message,location);
+    message.clear();
   }
 
-  float med = 0;
-  for(int i = 0; i < smoothed.size(); i++)
-  {
-    med += smoothed.get(i);
-  }
-
-  med /= smoothed.size();
-
-  message.setAddrPattern(Addr);
-  message.add(med);
-  oscP5.send(message,location);
-  message.clear();
-  println(med);
 }
 
 
 public void toAbleton()
 {
-  if(wait == true)
+  if(wait == waitmax)
   {
+    println(wait);
+
     sendOSC("/Z",posZ,msg,myRemoteLocation);
+
     sendOSC("/freq",map(posZ,0f,1f,3f,10f),msg,myRemoteLocation);
 
     sendOSC("/Map1",getPixel(heatmap1, "r"),msg,myRemoteLocation);
@@ -284,6 +296,7 @@ public void toAbleton()
     sendOSC("/Map10",getPixel(heatmap4, "r"),msg,myRemoteLocation);
     sendOSC("/Map11",getPixel(heatmap4, "g"),msg,myRemoteLocation);
     sendOSC("/Map12",getPixel(heatmap4, "b"),msg,myRemoteLocation);
+
 
     //sendOSC("/TiltX",tiltX,msg,myRemoteLocation);
     //sendOSC("/TiltY",tiltY,msg,myRemoteLocation);
@@ -309,7 +322,11 @@ public void toAbleton()
     }
     savedClipVal = clipVal;
   }
-  wait = !wait;
+  wait++;
+  if(wait > waitmax)
+  {
+    wait = 0;
+  }
 }
 
 
@@ -378,6 +395,71 @@ public void drawCircle()
   fill(255);
   noStroke();
   ellipse(width/2,height/2, 50, 50);
+}
+
+
+class OSClass{
+
+private FloatList buffer = new FloatList();
+private int buffersize = 10;
+private String Addr;
+private OscMessage message = new OscMessage("/default");
+private boolean isChanged = true;
+private float out;
+
+OSClass(NetAddress loc, String Adr)
+{
+  Addr = Adr;
+  //location = loc;
+}
+
+private void checkIfChanged()
+{
+  if(buffer.max()==buffer.min())
+  {
+    isChanged = false;
+  }else{
+
+    isChanged = true;
+  }
+}
+
+
+private void writeBuffer()
+{
+  if(buffer.size()!=buffersize)
+  {
+    buffer.append(out);
+  }else{
+    buffer.remove(0);
+    buffer.append(out);
+  }
+}
+
+public void send(float value)
+{
+  out = value;
+  writeBuffer();
+
+  checkIfChanged();
+
+  if(isChanged)
+  {
+    println(buffer);
+    message.setAddrPattern(Addr);
+    message.add(out);
+    OscP5.flush(message,myRemoteLocation);
+    message.clear();
+  }
+
+}
+
+
+public void setBuffersize(int size)
+{
+  buffersize = size;
+}
+
 }
   public void settings() {  size(944, 944); }
   static public void main(String[] passedArgs) {
