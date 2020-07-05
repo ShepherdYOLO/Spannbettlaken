@@ -83,10 +83,7 @@ void Menu()
     text("Welcome " + text + "!\n\nDo you want to use tablet mode [press t]\nOr mouse mode [press m]", width/2, height*0.3);
   }
 }
-/*
-FloatList smoothed = new FloatList();
-int listSize = 10;
-*/
+
 void refreshInputs() {
   float lerpXY = 0.4;
   float lerpZ = 0.3;
@@ -121,23 +118,6 @@ void refreshInputs() {
     posX = mouseX;
     posY = mouseY;
   }
-  /*
-  if(smoothed.size()<listSize)
-  {
-    smoothed.append(output);
-  }else{
-    smoothed.remove(0);
-    smoothed.append(output);
-  }
-
-  float med = 0;
-  for(int i = 0; i < smoothed.size(); i++)
-  {
-    med += smoothed.get(i);
-  }
-
-  med /= smoothed.size();
-  */
 }
 
 
@@ -173,29 +153,28 @@ void sendOSC(String Addr, float output, OscMessage message, NetAddress location)
 
 void toAbleton()
 {
-  if(wait == waitmax)
+  if(wait == waitmax || true)
   {
     println(wait);
 
-    sendOSC("/Z",posZ,msg,myRemoteLocation);
+    Z.send(posZ);
 
-    sendOSC("/freq",map(posZ,0f,1f,3f,10f),msg,myRemoteLocation);
+    Map1.send(getPixel(heatmap1, "r"));
+    Map2.send(getPixel(heatmap1, "g"));
+    Map3.send(getPixel(heatmap1, "b"));
 
-    sendOSC("/Map1",getPixel(heatmap1, "r"),msg,myRemoteLocation);
-    sendOSC("/Map2",getPixel(heatmap1, "g"),msg,myRemoteLocation);
-    sendOSC("/Map3",getPixel(heatmap1, "b"),msg,myRemoteLocation);
+    Map7.send(getPixel(heatmap2, "r"));
+    Map8.send(getPixel(heatmap2, "g"));
+    Map9.send(getPixel(heatmap2, "b"));
 
-    sendOSC("/Map7",getPixel(heatmap2, "r"),msg,myRemoteLocation);
-    sendOSC("/Map8",getPixel(heatmap2, "g"),msg,myRemoteLocation);
-    sendOSC("/Map9",getPixel(heatmap2, "b"),msg,myRemoteLocation);
+    Map4.send(getPixel(heatmap3, "r"));
+    Map5.send(getPixel(heatmap3, "g"));
+    Map5.send(getPixel(heatmap3, "b"));
 
-    sendOSC("/Map4",getPixel(heatmap3, "r"),msg,myRemoteLocation);
-    sendOSC("/Map5",getPixel(heatmap3, "g"),msg,myRemoteLocation);
-    sendOSC("/Map6",getPixel(heatmap3, "b"),msg,myRemoteLocation);
+    Map10.send(getPixel(heatmap4, "r"));
+    Map11.send(getPixel(heatmap4, "g"));
+    Map12.send(getPixel(heatmap4, "b"));
 
-    sendOSC("/Map10",getPixel(heatmap4, "r"),msg,myRemoteLocation);
-    sendOSC("/Map11",getPixel(heatmap4, "g"),msg,myRemoteLocation);
-    sendOSC("/Map12",getPixel(heatmap4, "b"),msg,myRemoteLocation);
 
 
     //sendOSC("/TiltX",tiltX,msg,myRemoteLocation);
@@ -298,10 +277,14 @@ void drawCircle()
 }
 
 
+
+
+
+
 class OSClass{
 
 private FloatList buffer = new FloatList();
-private int buffersize = 10;
+private int buffersize = 5;
 private String Addr;
 private OscMessage message = new OscMessage("/default");
 private boolean isChanged = true;

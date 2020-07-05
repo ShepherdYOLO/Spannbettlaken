@@ -12,8 +12,26 @@ OscP5 oscP5 = new OscP5(this,8000);
 NetAddress myRemoteLocation;
 NetAddress toAddmos;
 
-OscMessage msg = new OscMessage("/Z");
-OscMessage addmos = new OscMessage("/out");
+//OscMessage msg = new OscMessage("/Z");
+//OscMessage addmos = new OscMessage("/out");
+
+OSClass Z = new OSClass(myRemoteLocation,"/Z");
+
+OSClass Map1 = new OSClass(myRemoteLocation,"/Map1");
+OSClass Map2 = new OSClass(myRemoteLocation,"/Map2");
+OSClass Map3 = new OSClass(myRemoteLocation,"/Map3");
+
+OSClass Map7 = new OSClass(myRemoteLocation,"/Map7");
+OSClass Map8 = new OSClass(myRemoteLocation,"/Map8");
+OSClass Map9 = new OSClass(myRemoteLocation,"/Map9");
+
+OSClass Map4 = new OSClass(myRemoteLocation,"/Map4");
+OSClass Map5 = new OSClass(myRemoteLocation,"/Map5");
+OSClass Map6 = new OSClass(myRemoteLocation,"/Map6");
+
+OSClass Map10 = new OSClass(myRemoteLocation,"/Map10");
+OSClass Map11 = new OSClass(myRemoteLocation,"/Map11");
+OSClass Map12 = new OSClass(myRemoteLocation,"/Map12");
 
 float posX = 0;
 float posY = 0;
@@ -55,12 +73,11 @@ void setup() {
   imageMode(CENTER);
 
   roboto = createFont("RobotoCondensed-Light.ttf",50);
-
-
 }
 
-OSClass Z = new OSClass(myRemoteLocation,"/Z");
-OSClass Map1 = new OSClass(myRemoteLocation,"/Map1");
+
+
+
 
 void draw() {
   clear();
@@ -68,13 +85,13 @@ void draw() {
   drawFocus();
 
   //image(img, width/2, height/2 );
-  Z.send(posZ);
-  Map1.send(getPixel(heatmap1, "r"));
+
+
   toAddmos();
   Menu();
   showValues();
   Cursor();
-  //toAbleton();
+  toAbleton();
   noStroke();
   noCursor();
 }

@@ -80,7 +80,22 @@ public void setup() {
 }
 
 OSClass Z = new OSClass(myRemoteLocation,"/Z");
+
 OSClass Map1 = new OSClass(myRemoteLocation,"/Map1");
+OSClass Map2 = new OSClass(myRemoteLocation,"/Map2");
+OSClass Map3 = new OSClass(myRemoteLocation,"/Map3");
+
+OSClass Map7 = new OSClass(myRemoteLocation,"/Map7");
+OSClass Map8 = new OSClass(myRemoteLocation,"/Map8");
+OSClass Map9 = new OSClass(myRemoteLocation,"/Map9");
+
+OSClass Map4 = new OSClass(myRemoteLocation,"/Map4");
+OSClass Map5 = new OSClass(myRemoteLocation,"/Map5");
+OSClass Map6 = new OSClass(myRemoteLocation,"/Map6");
+
+OSClass Map10 = new OSClass(myRemoteLocation,"/Map10");
+OSClass Map11 = new OSClass(myRemoteLocation,"/Map11");
+OSClass Map12 = new OSClass(myRemoteLocation,"/Map12");
 
 public void draw() {
   clear();
@@ -88,13 +103,13 @@ public void draw() {
   drawFocus();
 
   //image(img, width/2, height/2 );
-  Z.send(posZ);
-  Map1.send(getPixel(heatmap1, "r"));
+
+
   toAddmos();
   Menu();
   showValues();
   Cursor();
-  //toAbleton();
+  toAbleton();
   noStroke();
   noCursor();
 }
@@ -273,10 +288,10 @@ public void sendOSC(String Addr, float output, OscMessage message, NetAddress lo
 
 public void toAbleton()
 {
-  if(wait == waitmax)
+  if(wait == waitmax || true)
   {
     println(wait);
-
+    /*
     sendOSC("/Z",posZ,msg,myRemoteLocation);
 
     sendOSC("/freq",map(posZ,0f,1f,3f,10f),msg,myRemoteLocation);
@@ -296,6 +311,25 @@ public void toAbleton()
     sendOSC("/Map10",getPixel(heatmap4, "r"),msg,myRemoteLocation);
     sendOSC("/Map11",getPixel(heatmap4, "g"),msg,myRemoteLocation);
     sendOSC("/Map12",getPixel(heatmap4, "b"),msg,myRemoteLocation);
+    */
+    Z.send(posZ);
+
+    Map1.send(getPixel(heatmap1, "r"));
+    Map2.send(getPixel(heatmap1, "g"));
+    Map3.send(getPixel(heatmap1, "b"));
+
+    Map7.send(getPixel(heatmap2, "r"));
+    Map8.send(getPixel(heatmap2, "g"));
+    Map9.send(getPixel(heatmap2, "b"));
+
+    Map4.send(getPixel(heatmap3, "r"));
+    Map5.send(getPixel(heatmap3, "g"));
+    Map5.send(getPixel(heatmap3, "b"));
+
+    Map10.send(getPixel(heatmap4, "r"));
+    Map11.send(getPixel(heatmap4, "g"));
+    Map12.send(getPixel(heatmap4, "b"));
+
 
 
     //sendOSC("/TiltX",tiltX,msg,myRemoteLocation);
@@ -401,7 +435,7 @@ public void drawCircle()
 class OSClass{
 
 private FloatList buffer = new FloatList();
-private int buffersize = 10;
+private int buffersize = 5;
 private String Addr;
 private OscMessage message = new OscMessage("/default");
 private boolean isChanged = true;
