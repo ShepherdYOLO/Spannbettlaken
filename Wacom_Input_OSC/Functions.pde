@@ -33,7 +33,7 @@ void Cursor()
 
 float getPixel(PImage image, String colr)
 {
-  //Liest das Bild mit der id "image" ein und gibt den Helligkeitswert des Channels "c" an der Position X, Y)
+  //Liest das Bild mit der id "image" ein und gibt den Helligkeitswert des Farbkanal "c" an der Position X, Y)
 
   float value = 0;
   int x = int(posX);
@@ -60,6 +60,8 @@ float getPixel(PImage image, String colr)
 
 void Menu()
 {
+  //Zeichnet zu Beginn das Menü zum auswählen der Modi
+
   if (key == 't') {
     mode = "tablet";
   }
@@ -85,6 +87,8 @@ void Menu()
 }
 
 void refreshInputs() {
+  //Aktualisiert die Eingabedaten. Hier wird auch der Maus- bzw. Tabletmodus umgesetzt
+  //Außerdem findet hier auch ein erstes Lerpen statt um den Cursor träger zu machen
   float lerpXY = 0.4;
   float lerpZ = 0.3;
 
@@ -140,6 +144,8 @@ int holdtime = 11;
 
 void sendOSC(String Addr, float output, OscMessage message, NetAddress location)
 {
+  //Funktion zum übermitteln von OSC
+
   if(/*output !=0*/true)
   {
     message.setAddrPattern(Addr);
@@ -153,6 +159,8 @@ void sendOSC(String Addr, float output, OscMessage message, NetAddress location)
 
 void toAbleton()
 {
+  //Sammelt alle OSC Nachrichten, um diese nach Ableton zu schicken
+
   if(wait == waitmax || true)
   {
     Z.send(posZ);
@@ -232,6 +240,8 @@ void toAddmos()
 
 void drawFocus()
 {
+  //berechnet den "Taschenlampen"-Effekt
+
   loadPixels();
   img.loadPixels();
   for(int x = 0; x < img.width; x++){
@@ -266,17 +276,7 @@ String dbug(String s)
 }
 
 
-
-void drawCircle()
-{
-  fill(255);
-  noStroke();
-  ellipse(width/2,height/2, 50, 50);
-}
-
-
-
-
+////////////////////////// Class //////////////////////////////////
 
 
 class OSClass{
@@ -290,12 +290,16 @@ private float out;
 
 OSClass(NetAddress loc, String Adr)
 {
+  //Konstruktor
+
   Addr = Adr;
   //location = loc;
 }
 
 private void checkIfChanged()
 {
+  //Überprüft, ob die Daten aus dem Buffer sich ändern oder nicht
+
   if(buffer.max()==buffer.min())
   {
     isChanged = false;
@@ -308,6 +312,8 @@ private void checkIfChanged()
 
 private void writeBuffer()
 {
+  //Beschreibt den Buffer mit den Input-Daten
+
   if(buffer.size()!=buffersize)
   {
     buffer.append(out);
@@ -319,6 +325,8 @@ private void writeBuffer()
 
 public void send(float value)
 {
+  //Sendet die OSC Daten aus der Klasse
+
   out = value;
   writeBuffer();
 
@@ -338,6 +346,8 @@ public void send(float value)
 
 public void setBuffersize(int size)
 {
+  //Setter-Funktion zum festlegen der Buffersize von Außen
+
   buffersize = size;
 }
 
