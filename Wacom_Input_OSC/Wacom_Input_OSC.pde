@@ -2,11 +2,12 @@ import netP5.*;
 import oscP5.*;
 import codeanticode.tablet.*;
 
-PFont  roboto;
+PFont roboto;
+PFont roboto_bold;
 
 Tablet tablet;
 PImage img;
-PImage heatmap1, heatmap2, heatmap3, heatmap_clips, addmos_sine, heatmap4;
+PImage heatmap1, heatmap2, heatmap3, heatmap_clips, addmos_sine, heatmap4,heatmap5,heatmap6;
 String mode = "wait";
 OscP5 oscP5 = new OscP5(this,8000);
 NetAddress myRemoteLocation;
@@ -32,6 +33,16 @@ OSClass Map6 = new OSClass(myRemoteLocation,"/Map6");
 OSClass Map10 = new OSClass(myRemoteLocation,"/Map10");
 OSClass Map11 = new OSClass(myRemoteLocation,"/Map11");
 OSClass Map12 = new OSClass(myRemoteLocation,"/Map12");
+
+OSClass Map13 = new OSClass(myRemoteLocation,"/Map13");
+OSClass Map14 = new OSClass(myRemoteLocation,"/Map14");
+OSClass Map15 = new OSClass(myRemoteLocation,"/Map15");
+
+OSClass Map16 = new OSClass(myRemoteLocation,"/Map16");
+OSClass Map17 = new OSClass(myRemoteLocation,"/Map17");
+OSClass Map18 = new OSClass(myRemoteLocation,"/Map18");
+
+OSClass Y = new OSClass(myRemoteLocation,"/Y");
 
 float posX = 0;
 float posY = 0;
@@ -67,12 +78,15 @@ void setup() {
   heatmap2 = loadImage("heatmap2.png");
   heatmap3 = loadImage("heatmap3.png");
   heatmap4 = loadImage("heatmap4.png");
+  heatmap5 = loadImage("heatmap5.png");
+  heatmap6 = loadImage("heatmap6.png");
   heatmap_clips = loadImage("heatmap_clips.png");
   addmos_sine = loadImage("Addmos_Sinussound.jpg");
   img = loadImage("Schwarze_Zumalung.png");
   imageMode(CENTER);
 
   roboto = createFont("RobotoCondensed-Light.ttf",50);
+  roboto_bold = createFont("RobotoCondensed-Bold.ttf",50);
 }
 
 
@@ -89,7 +103,7 @@ void draw() {
 
   toAddmos();
   Menu();
-  showValues();
+  //showValues();
   Cursor();
   toAbleton();
   noStroke();

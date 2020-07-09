@@ -22,11 +22,12 @@ public class Wacom_Input_OSC extends PApplet {
 
 
 
-PFont  roboto;
+PFont roboto;
+PFont roboto_bold;
 
 Tablet tablet;
 PImage img;
-PImage heatmap1, heatmap2, heatmap3, heatmap_clips, addmos_sine, heatmap4;
+PImage heatmap1, heatmap2, heatmap3, heatmap_clips, addmos_sine, heatmap4,heatmap5,heatmap6;
 String mode = "wait";
 OscP5 oscP5 = new OscP5(this,8000);
 NetAddress myRemoteLocation;
@@ -52,6 +53,16 @@ OSClass Map6 = new OSClass(myRemoteLocation,"/Map6");
 OSClass Map10 = new OSClass(myRemoteLocation,"/Map10");
 OSClass Map11 = new OSClass(myRemoteLocation,"/Map11");
 OSClass Map12 = new OSClass(myRemoteLocation,"/Map12");
+
+OSClass Map13 = new OSClass(myRemoteLocation,"/Map13");
+OSClass Map14 = new OSClass(myRemoteLocation,"/Map14");
+OSClass Map15 = new OSClass(myRemoteLocation,"/Map15");
+
+OSClass Map16 = new OSClass(myRemoteLocation,"/Map16");
+OSClass Map17 = new OSClass(myRemoteLocation,"/Map17");
+OSClass Map18 = new OSClass(myRemoteLocation,"/Map18");
+
+OSClass Y = new OSClass(myRemoteLocation,"/Y");
 
 float posX = 0;
 float posY = 0;
@@ -87,12 +98,15 @@ public void setup() {
   heatmap2 = loadImage("heatmap2.png");
   heatmap3 = loadImage("heatmap3.png");
   heatmap4 = loadImage("heatmap4.png");
+  heatmap5 = loadImage("heatmap5.png");
+  heatmap6 = loadImage("heatmap6.png");
   heatmap_clips = loadImage("heatmap_clips.png");
   addmos_sine = loadImage("Addmos_Sinussound.jpg");
   img = loadImage("Schwarze_Zumalung.png");
   imageMode(CENTER);
 
   roboto = createFont("RobotoCondensed-Light.ttf",50);
+  roboto_bold = createFont("RobotoCondensed-Bold.ttf",50);
 }
 
 
@@ -109,7 +123,7 @@ public void draw() {
 
   toAddmos();
   Menu();
-  showValues();
+  //showValues();
   Cursor();
   toAbleton();
   noStroke();
@@ -150,7 +164,7 @@ public void Cursor()
 
 public float getPixel(PImage image, String colr)
 {
-  //Liest das Bild mit der id "image" ein und gibt den Helligkeitswert des Channels "c" an der Position X, Y)
+  //Liest das Bild mit der id "image" ein und gibt den Helligkeitswert des Farbkanal "c" an der Position X, Y)
 
   float value = 0;
   int x = PApplet.parseInt(posX);
@@ -177,6 +191,8 @@ public float getPixel(PImage image, String colr)
 
 public void Menu()
 {
+  //Zeichnet zu Beginn das Menü zum auswählen der Modi
+
   if (key == 't') {
     mode = "tablet";
   }
@@ -186,22 +202,28 @@ public void Menu()
   if (key == 'w') {
     mode = "wait";
   }
+  if (key == 'i') {
+    println("und los Lenchen!");
+  }
   if (mode == "wait")
   {
-
     fill(0xff0F181F, 210);
     rect(0, 0, width, height);
     fill(0xffFCF9F0);
     textAlign(CENTER);
     textFont(roboto);
-    textSize(30);
+    textSize(35);
     String text;
     if((tablet.getPressure() > 0.5f) && (tablet.getPenKind()==3)){text = "du Nudel";}else{text = "to Spannbettlaken";}
-    text("Welcome " + text + "!\n\nDo you want to use tablet mode [press t]\nOr mouse mode [press m]", width/2, height*0.3f);
+    text("Welcome " + text , width/2, height*0.4f);
+    textSize(25);
+    text("tablet mode [press t]\nmouse mode [press m]\n\ninformation [press i]", width/2, height*0.5f);
   }
 }
 
 public void refreshInputs() {
+  //Aktualisiert die Eingabedaten. Hier wird auch der Maus- bzw. Tabletmodus umgesetzt
+  //Außerdem findet hier auch ein erstes Lerpen statt um den Cursor träger zu machen
   float lerpXY = 0.4f;
   float lerpZ = 0.3f;
 
@@ -257,6 +279,8 @@ int holdtime = 11;
 
 public void sendOSC(String Addr, float output, OscMessage message, NetAddress location)
 {
+  //Funktion zum übermitteln von OSC
+
   if(/*output !=0*/true)
   {
     message.setAddrPattern(Addr);
@@ -270,9 +294,12 @@ public void sendOSC(String Addr, float output, OscMessage message, NetAddress lo
 
 public void toAbleton()
 {
+  //Sammelt alle OSC Nachrichten, um diese nach Ableton zu schicken
+
   if(wait == waitmax || true)
   {
     Z.send(posZ);
+    Y.send(map(posY,0,height,0,1));
 
     Map1.send(getPixel(heatmap1, "r"));
     Map2.send(getPixel(heatmap1, "g"));
@@ -290,10 +317,15 @@ public void toAbleton()
     Map11.send(getPixel(heatmap4, "g"));
     Map12.send(getPixel(heatmap4, "b"));
 
+    Map13.send(getPixel(heatmap5, "r"));
+    Map14.send(getPixel(heatmap5, "g"));
+    Map15.send(getPixel(heatmap5, "b"));
+
+    Map16.send(getPixel(heatmap6, "r"));
+    Map17.send(getPixel(heatmap6, "g"));
+    Map18.send(getPixel(heatmap6, "b"));
 
 
-    //sendOSC("/TiltX",tiltX,msg,myRemoteLocation);
-    //sendOSC("/TiltY",tiltY,msg,myRemoteLocation);
 
     float ClipCount = 10;
     // Legt die Anzahl der Clips fest, die es zu Unterscheiden gilt, VORSICHT wenn schon Maps angelegt sind
@@ -349,6 +381,8 @@ public void toAddmos()
 
 public void drawFocus()
 {
+  //berechnet den "Taschenlampen"-Effekt
+
   loadPixels();
   img.loadPixels();
   for(int x = 0; x < img.width; x++){
@@ -383,17 +417,7 @@ public String dbug(String s)
 }
 
 
-
-public void drawCircle()
-{
-  fill(255);
-  noStroke();
-  ellipse(width/2,height/2, 50, 50);
-}
-
-
-
-
+////////////////////////// Class //////////////////////////////////
 
 
 class OSClass{
@@ -407,12 +431,16 @@ private float out;
 
 OSClass(NetAddress loc, String Adr)
 {
+  //Konstruktor
+
   Addr = Adr;
   //location = loc;
 }
 
 private void checkIfChanged()
 {
+  //Überprüft, ob die Daten aus dem Buffer sich ändern oder nicht
+
   if(buffer.max()==buffer.min())
   {
     isChanged = false;
@@ -425,6 +453,8 @@ private void checkIfChanged()
 
 private void writeBuffer()
 {
+  //Beschreibt den Buffer mit den Input-Daten
+
   if(buffer.size()!=buffersize)
   {
     buffer.append(out);
@@ -436,6 +466,8 @@ private void writeBuffer()
 
 public void send(float value)
 {
+  //Sendet die OSC Daten aus der Klasse
+
   out = value;
   writeBuffer();
 
@@ -455,6 +487,8 @@ public void send(float value)
 
 public void setBuffersize(int size)
 {
+  //Setter-Funktion zum festlegen der Buffersize von Außen
+
   buffersize = size;
 }
 

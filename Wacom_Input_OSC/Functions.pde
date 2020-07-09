@@ -71,18 +71,22 @@ void Menu()
   if (key == 'w') {
     mode = "wait";
   }
+  if (key == 'i') {
+    println("und los Lenchen!");
+  }
   if (mode == "wait")
   {
-
     fill(#0F181F, 210);
     rect(0, 0, width, height);
     fill(#FCF9F0);
     textAlign(CENTER);
     textFont(roboto);
-    textSize(30);
+    textSize(35);
     String text;
     if((tablet.getPressure() > 0.5) && (tablet.getPenKind()==3)){text = "du Nudel";}else{text = "to Spannbettlaken";}
-    text("Welcome " + text + "!\n\nDo you want to use tablet mode [press t]\nOr mouse mode [press m]", width/2, height*0.3);
+    text("Welcome " + text , width/2, height*0.4);
+    textSize(25);
+    text("tablet mode [press t]\nmouse mode [press m]\n\ninformation [press i]", width/2, height*0.5);
   }
 }
 
@@ -164,6 +168,7 @@ void toAbleton()
   if(wait == waitmax || true)
   {
     Z.send(posZ);
+    Y.send(map(posY,0,height,0,1));
 
     Map1.send(getPixel(heatmap1, "r"));
     Map2.send(getPixel(heatmap1, "g"));
@@ -181,10 +186,15 @@ void toAbleton()
     Map11.send(getPixel(heatmap4, "g"));
     Map12.send(getPixel(heatmap4, "b"));
 
+    Map13.send(getPixel(heatmap5, "r"));
+    Map14.send(getPixel(heatmap5, "g"));
+    Map15.send(getPixel(heatmap5, "b"));
+
+    Map16.send(getPixel(heatmap6, "r"));
+    Map17.send(getPixel(heatmap6, "g"));
+    Map18.send(getPixel(heatmap6, "b"));
 
 
-    //sendOSC("/TiltX",tiltX,msg,myRemoteLocation);
-    //sendOSC("/TiltY",tiltY,msg,myRemoteLocation);
 
     float ClipCount = 10;
     // Legt die Anzahl der Clips fest, die es zu Unterscheiden gilt, VORSICHT wenn schon Maps angelegt sind
