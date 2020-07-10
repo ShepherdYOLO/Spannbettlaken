@@ -13,7 +13,7 @@ OscP5 oscP5 = new OscP5(this,8000);
 NetAddress myRemoteLocation;
 NetAddress toAddmos;
 
-//OscMessage msg = new OscMessage("/Z");
+OscMessage msg = new OscMessage("/Z");
 OscMessage addmos = new OscMessage("/out");
 
 OSClass Z = new OSClass(myRemoteLocation,"/Z");
@@ -87,6 +87,8 @@ void setup() {
 
   roboto = createFont("RobotoCondensed-Light.ttf",50);
   roboto_bold = createFont("RobotoCondensed-Bold.ttf",50);
+
+
 }
 
 
@@ -102,10 +104,18 @@ void draw() {
 
 
   toAddmos();
-  Menu();
+
   //showValues();
   Cursor();
   toAbleton();
   noStroke();
   noCursor();
+  Menu();
+}
+
+void keyPressed()
+{
+  Menu();
+
+
 }

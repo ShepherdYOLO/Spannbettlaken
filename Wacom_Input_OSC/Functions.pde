@@ -34,7 +34,7 @@ void Cursor()
 float getPixel(PImage image, String colr)
 {
   //Liest das Bild mit der id "image" ein und gibt den Helligkeitswert des Farbkanal "c" an der Position X, Y)
-
+  /*
   float value = 0;
   int x = int(posX);
   int y = int(posY);
@@ -54,6 +54,26 @@ float getPixel(PImage image, String colr)
     break;
   }
   return map(value, 0, 255, 0, 1);
+  */
+
+  int x = round(posX);
+  int y = round(posY);
+  color c = image.get(x-((width/2)-(image.width/2)),y-((height/2)-(image.height/2)));
+  float val;
+
+  switch(colr){
+   case "r":
+     val = red(c);
+     return map(val,0,255,0,1);
+   case "g":
+     val = green(c);
+     return map(val,0,255,0,1);
+   case "b":
+     val = blue(c);
+     return map(val,0,255,0,1);
+   default:
+     return 0;
+  }
 }
 
 
@@ -64,15 +84,19 @@ void Menu()
 
   if (key == 't') {
     mode = "tablet";
+    startAbleton();
   }
   if (key == 'm') {
     mode = "mouse";
+    startAbleton();
   }
   if (key == 'w') {
     mode = "wait";
+    startAbleton();
   }
   if (key == 'i') {
-    println("und los Lenchen!");
+    mode = "info";
+    startAbleton();
   }
   if (mode == "wait")
   {
@@ -87,6 +111,7 @@ void Menu()
     text("Welcome " + text , width/2, height*0.4);
     textSize(25);
     text("tablet mode [press t]\nmouse mode [press m]\n\ninformation [press i]", width/2, height*0.5);
+    noLoop();
   }
 }
 
@@ -157,6 +182,33 @@ void sendOSC(String Addr, float output, OscMessage message, NetAddress location)
     oscP5.send(message,location);
     message.clear();
   }
+
+}
+
+void startAbleton()
+{
+  switch(mode){
+    case "tablet":
+      sendOSC("/control",0,msg,myRemoteLocation);
+      loop();
+      break;
+    case "mouse":
+      sendOSC("/control",0,msg,myRemoteLocation);
+      loop();
+      break;
+    case "info":
+      sendOSC("/control",1,msg,myRemoteLocation);
+      noLoop();
+      break;
+    case "wait":
+      sendOSC("/control",2,msg,myRemoteLocation);
+      noLoop();
+      break;
+    default:
+      break;
+
+  }
+
 
 }
 

@@ -33,7 +33,7 @@ OscP5 oscP5 = new OscP5(this,8000);
 NetAddress myRemoteLocation;
 NetAddress toAddmos;
 
-//OscMessage msg = new OscMessage("/Z");
+OscMessage msg = new OscMessage("/Z");
 OscMessage addmos = new OscMessage("/out");
 
 OSClass Z = new OSClass(myRemoteLocation,"/Z");
@@ -107,6 +107,8 @@ public void setup() {
 
   roboto = createFont("RobotoCondensed-Light.ttf",50);
   roboto_bold = createFont("RobotoCondensed-Bold.ttf",50);
+
+
 }
 
 
@@ -122,12 +124,20 @@ public void draw() {
 
 
   toAddmos();
-  Menu();
+
   //showValues();
   Cursor();
   toAbleton();
   noStroke();
   noCursor();
+  Menu();
+}
+
+public void keyPressed()
+{
+  Menu();
+
+
 }
 public void showValues()
 {
@@ -165,10 +175,10 @@ public void Cursor()
 public float getPixel(PImage image, String colr)
 {
   //Liest das Bild mit der id "image" ein und gibt den Helligkeitswert des Farbkanal "c" an der Position X, Y)
-
+  /*
   float value = 0;
-  int x = PApplet.parseInt(posX);
-  int y = PApplet.parseInt(posY);
+  int x = int(posX);
+  int y = int(posY);
   image.loadPixels();
   loadPixels();
   int location = x + y*image.width;
@@ -185,6 +195,26 @@ public float getPixel(PImage image, String colr)
     break;
   }
   return map(value, 0, 255, 0, 1);
+  */
+
+  int x = round(posX);
+  int y = round(posY);
+  int c = image.get(x-((width/2)-(image.width/2)),y-((height/2)-(image.height/2)));
+  float val;
+
+  switch(colr){
+   case "r":
+     val = red(c);
+     return map(val,0,255,0,1);
+   case "g":
+     val = green(c);
+     return map(val,0,255,0,1);
+   case "b":
+     val = blue(c);
+     return map(val,0,255,0,1);
+   default:
+     return 0;
+  }
 }
 
 
@@ -195,15 +225,19 @@ public void Menu()
 
   if (key == 't') {
     mode = "tablet";
+    startAbleton();
   }
   if (key == 'm') {
     mode = "mouse";
+    startAbleton();
   }
   if (key == 'w') {
     mode = "wait";
+    startAbleton();
   }
   if (key == 'i') {
-    println("und los Lenchen!");
+    mode = "info";
+    startAbleton();
   }
   if (mode == "wait")
   {
@@ -218,6 +252,7 @@ public void Menu()
     text("Welcome " + text , width/2, height*0.4f);
     textSize(25);
     text("tablet mode [press t]\nmouse mode [press m]\n\ninformation [press i]", width/2, height*0.5f);
+    noLoop();
   }
 }
 
@@ -288,6 +323,33 @@ public void sendOSC(String Addr, float output, OscMessage message, NetAddress lo
     oscP5.send(message,location);
     message.clear();
   }
+
+}
+
+public void startAbleton()
+{
+  switch(mode){
+    case "tablet":
+      sendOSC("/control",0,msg,myRemoteLocation);
+      loop();
+      break;
+    case "mouse":
+      sendOSC("/control",0,msg,myRemoteLocation);
+      loop();
+      break;
+    case "info":
+      sendOSC("/control",1,msg,myRemoteLocation);
+      noLoop();
+      break;
+    case "wait":
+      sendOSC("/control",2,msg,myRemoteLocation);
+      noLoop();
+      break;
+    default:
+      break;
+
+  }
+
 
 }
 
