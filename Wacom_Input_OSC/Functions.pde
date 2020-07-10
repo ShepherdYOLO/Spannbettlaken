@@ -344,7 +344,7 @@ public void send(float value)
 
   if(isChanged)
   {
-    println(buffer);
+    println(Addr + " | " + buffer);
     message.setAddrPattern(Addr);
     message.add(out);
     OscP5.flush(message,myRemoteLocation);
