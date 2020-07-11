@@ -189,11 +189,17 @@ void startAbleton()
 {
   switch(mode){
     case "tablet":
-      sendOSC("/control",0,msg,myRemoteLocation);
+      if(keyPressed)
+      {
+        sendOSC("/control",0,msg,myRemoteLocation);
+      }
       loop();
       break;
     case "mouse":
-      sendOSC("/control",0,msg,myRemoteLocation);
+      if(keyPressed)
+      {
+        sendOSC("/control",0,msg,myRemoteLocation);
+      }
       loop();
       break;
     case "info":
